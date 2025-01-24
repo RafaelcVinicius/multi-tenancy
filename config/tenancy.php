@@ -18,7 +18,7 @@ return [
      */
     'central_domains' => [
         'localhost',
-        'rafael.com',
+        'meusg.com.br',
     ],
 
     /**

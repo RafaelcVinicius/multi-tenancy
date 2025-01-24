@@ -13,7 +13,8 @@ services:
     depends_on:
       - php
     networks:
-      - laravel-network
+      - multi-laravel
+      - shared-laravel-network
 
   php:
     build:
@@ -26,7 +27,8 @@ services:
     depends_on:
       - postgres
     networks:
-      - laravel-network
+      - multi-laravel
+      - shared-laravel-network
 
   postgres:
     restart: unless-stopped
@@ -41,10 +43,12 @@ services:
     volumes:
       - database:/var/lib/postgresql/data
     networks:
-      - laravel-network
+      - multi-laravel
 
 networks:
-  laravel-network:
+  multi-laravel:
+  shared-laravel-network:
+    external: true
 
 volumes:
   database:
