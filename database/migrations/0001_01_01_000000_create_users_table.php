@@ -13,12 +13,18 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->uuid('public_id')->unique();
+            $table->uuid('keycloak_id');
+            $table->string('email');
             $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->unique(['keycloak_id', 'deleted_at']);
+            $table->unique(['email', 'deleted_at']);
+
+            $table->index('created_at');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -35,6 +41,32 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        Schema::create('user_details', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users');
+            $table->string('cpf', 11);
+            $table->string('nickname', 100);
+            $table->string('position', 60);
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->unique(['cpf', 'deleted_at']);
+
+            $table->index('created_at');
+        });
+
+        Schema::create('user_contacts', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users');
+            $table->uuid('public_id')->unique();
+            $table->string('type', 10);
+            $table->string('contact', 100);
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->index('created_at');
+        });
     }
 
     /**
@@ -45,5 +77,7 @@ return new class extends Migration
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('user_details');
+        Schema::dropIfExists('user_contacts');
     }
 };

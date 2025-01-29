@@ -1,13 +1,21 @@
 <?php
 
-use App\Http\Controllers\Usuarios\UsuarioController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Users\UserContactController;
+use App\Http\Controllers\Users\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:sanctum');
 
 Route::group(['prefix' => 'v1'], function () {
-    Route::apiResource('users', UsuarioController::class);
+    Route::prefix('auth')->group(function () {
+        Route::post('/token', [AuthController::class, 'token']);
+    });
+    Route::apiResource('users', UserController::class);
+    Route::prefix('users')->group(function () {
+        Route::get('logged', [UserController::class, 'logged']);
+    });
+    Route::apiResource('users.contacts', UserContactController::class);
 });

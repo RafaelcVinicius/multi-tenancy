@@ -2,8 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Payments;
-use App\Models\PaymentsIntention;
 use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
@@ -11,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class KeycloakAuthentication
 {
@@ -25,22 +24,22 @@ class KeycloakAuthentication
 
         try {
             if (!$token) {
-                if (!str_contains($request->route()->uri, 'api/users')) {                 
-                    return response()->json(['message' => 'Token de acesso ausente!'], 401);
+                if (str_contains(request()->url(), 'api/v1/users') || str_contains(request()->url(), 'api/v1/auth/token')){                 
+                    return $next($request);
                 }
                 else{
-                    return $next($request);
+                    return response()->json(['message' => 'Token de acesso ausente!'], 401);
                 }
             } else {
                 $publicKey = <<<EOD
                     -----BEGIN PUBLIC KEY-----
-                    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxlsS17K7ynLCmAI1S1+rfAd3Y+NpLUhoDhQNyUYclAa8ySwm5jZlWJlEf3S1nYBmPBchrhsMpMleylYIizbuh5xiEmjk17rzNJjbJZ6Z7EOP7k39LY/RQCHZF/po5vHWMhGymI+NMfjZvHpLMNl41cFJ5VZ4PmckOKTLLuMljLoKMg5TTOBI9fHDMzEc7bpPvGb16uUovcNuP/V7RMSm4oE9F8Yz9cSov/2GpoFYTDhfp78Gjam0jTlE2WKj2GyABbLLUcmW3B15UsnZGSgZRLe04MDMVjrxdDfvjPy5ZRW/45trogEYDenzL+JbyxhoiiRSGCK0cVygAdLJqj7vnQIDAQAB
+                    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnZG/QPzhdQ1c412scrIYCg3C3QuA+4hV5CLzvrcGeYXeSj/K/PJvc2MFzcfcsEqURzP0StMDFI8a3uvfWimmF5LueuyWcbG+C6mgIAgx5XdcJE12+nN6aF1aDh8zk0GoHjyu/DZC0kbAydSMkm0Sqz5Q9ob3v8wxfdhYkDWRSMPKP2yUZ9i10Lx1IzYk12MgUL6fENLMdjWL0zfZQJnmQSySXgBaVF5hEuShvCSWbKLlzlsuZiA1737x+Re7950c7KjaqWzcki+/lP10uZBFVsxyHuUGNnF3uZfYgOAd6qgIgXcjmyTwRqb1I2DLI1bdBBzV/o9Dco3H/GCkLyifGwIDAQAB
                     -----END PUBLIC KEY-----
                     EOD;
 
                 $decodedToken = JWT::decode($token, new Key($publicKey, 'RS256'));
 
-                $user = User::where('email', $decodedToken->email)->firstOrFail();
+                $user = User::where('email', $decodedToken->email)->dd();
             }
 
             Auth::loginUsingId($user->id);

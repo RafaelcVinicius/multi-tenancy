@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Resources\Usuarios;
+namespace App\Http\Resources\Users;
 
+use App\Http\Resources\Users\UserContactResource;
+use App\Http\Resources\Users\UserDetailResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UsuarioResource extends JsonResource
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,9 +19,9 @@ class UsuarioResource extends JsonResource
         return [
             'id' => $this->public_id,
             'email' => $this->email,
-            'nome' => $this->nome,
-            'detalhes' => new UsuarioDetalheResource($this->whenLoaded('detalhes')),
-            'contatos' => UsuarioContatoResource::collection($this->whenLoaded('contatos')),
+            'name' => $this->name,
+            'detail' => new UserDetailResource($this->whenLoaded('detail')),
+            'contacts' => UserContactResource::collection($this->whenLoaded('contacts')),
             'createdAt' => $this->created_at
         ];
     }

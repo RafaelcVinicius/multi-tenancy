@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Usuarios;
+namespace App\Http\Resources\Users;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UsuarioContatoResource extends JsonResource
+class UserContactResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +16,8 @@ class UsuarioContatoResource extends JsonResource
     {
         return [
             'id' => $this->public_id,
-            'tipo' => $this->tipo,
-            'contato' => $this->contato
+            'type' => $this->type,
+            'contact' => $this->contact
         ];
     }
 }

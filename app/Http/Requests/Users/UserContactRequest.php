@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Usuarios;
+namespace App\Http\Requests\Users;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UsuarioContatoRequest extends FormRequest
+class UserContactRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,14 +23,14 @@ class UsuarioContatoRequest extends FormRequest
     {
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
             return [
-                'tipo' => ['sometimes', 'string', 'max:10', 'in:' . implode(',', config()->get('constants.contact.type'))],
-                'contato' => ['sometimes', 'string', 'max:100'],
+                'typo' => ['sometimes', 'string', 'max:10', 'in:' . implode(',', config()->get('constants.contact.type'))],
+                'contact' => ['sometimes', 'string', 'max:100'],
             ];
         }
 
         return [
-            'tipo' => ['required', 'string', 'max:10', 'in:' . implode(',', config()->get('constants.contact.type'))],
-            'contato' => ['required', 'string', 'max:100'],
+            'type' => ['required', 'string', 'max:10', 'in:' . implode(',', config()->get('constants.contact.type'))],
+            'contact' => ['required', 'string', 'max:100'],
         ];
     }
 

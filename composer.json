@@ -10,6 +10,7 @@
         "firebase/php-jwt": "^6.11",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
+        "mehdi-fathi/eloquent-filter": "^4.4",
         "stancl/tenancy": "^3.8"
     },
     "require-dev": {

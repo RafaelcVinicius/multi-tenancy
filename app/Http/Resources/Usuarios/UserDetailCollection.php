@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Usuarios;
+namespace App\Http\Resources\Users;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class UsuarioDetalheCollection extends ResourceCollection
+class UserDetailCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
