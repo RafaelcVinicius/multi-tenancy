@@ -14,6 +14,6 @@ class DomainRepository extends BaseRepository implements DomainRepositoryInterfa
     }
 
     public function exist(string $name): bool{
-        return $this->model->where('name', $name)->exists();
+        return $this->model->where('domain', $name)->exists();
     }
 }

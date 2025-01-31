@@ -18,6 +18,7 @@ class TenantService extends BaseService
         TenantRepository $repository,
         protected DomainRepository $domainRepository
     ) {
+
         parent::__construct($repository, TenantResource::class, TenantCollection::class);
     }
 
