@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Shared\BaseController;
 use App\Services\Users\UserService;
 use App\Http\Requests\Users\UserRequest;
+use Illuminate\Support\Facades\Auth;
+
 class UserController extends BaseController
 {
     public function __construct(UserService $service)
@@ -27,9 +29,12 @@ class UserController extends BaseController
     {
         return $this->service->update($request->validated(), $id);
     }
-    
-    public function loggad(UserRequest $request, string $id)
+
+    /**
+     * Get user logged.
+     */
+    public function logged()
     {
-        return $this->service->update($request->validated(), $id);
+        return Auth::user();
     }
 }

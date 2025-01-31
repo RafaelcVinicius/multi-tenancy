@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class KeycloakAuthentication
 {
@@ -39,11 +38,11 @@ class KeycloakAuthentication
 
                 $decodedToken = JWT::decode($token, new Key($publicKey, 'RS256'));
 
-                $user = User::where('email', $decodedToken->email)->dd();
+                $user = User::where('keycloak_id', $decodedToken->sub)->firstOrFail();
             }
 
             Auth::loginUsingId($user->id);
-
+            
             return $next($request);
         } catch (\Exception) {
             return response()->json(['message' => 'Token de acesso inválido'], 401);
